@@ -19,6 +19,8 @@
     "webpack-cli": "^4.6.0"
   },
   "dependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.13.0"
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "gifencoder": "^2.0.1",
+    "stream": "0.0.2"
   }
 }
