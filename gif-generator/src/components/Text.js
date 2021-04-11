@@ -1,15 +1,11 @@
 import ComponentInterface from "./ComponentInterface"
 import Color from "./Color"
-import Hangul from "hangul-js"
 
 class Text extends ComponentInterface {
 	constructor(fabricObj) {
 		super();
 		this.color = new Color(fabricObj.fill);
-		this.text = {
-			plain:fabricObj.text,
-			splited:Hangul.disassemble(fabricObj.text)
-		};
+		this.text = fabricObj.text;
 		this.position = {
 			top:fabricObj.top,
 			left:fabricObj.left
