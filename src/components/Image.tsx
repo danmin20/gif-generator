@@ -5,9 +5,9 @@ import styled from "styled-components";
 const ToastEditor = dynamic(() => import("components/ToastEditor"), {
   ssr: false,
 });
-const Image = () => {
+const Image = ({ previewURL, setPreviewURL }) => {
   const [file, setFile] = useState(undefined);
-  const [previewURL, setPreviewURL] = useState<string | ArrayBuffer>("");
+  console.log('previewURL',previewURL)
 
   //   const uploadImage = (file) => {
   //     if (!file) {
@@ -15,32 +15,32 @@ const Image = () => {
   //     }
   //   };
 
-  const selectImg = (e) => {
-    const reader = new FileReader();
-    const targetFile = e.target.files[0];
-    setFile(targetFile);
-    // uploadImage(targetFile);
+  // const selectImg = (e) => {
+  //   const reader = new FileReader();
+  //   const targetFile = e.target.files[0];
+  //   setFile(targetFile);
+  //   // uploadImage(targetFile);
 
-    reader.onloadend = () => {
-      setPreviewURL(reader.result);
-    };
+  //   reader.onloadend = () => {
+  //     setPreviewURL(reader.result);
+  //   };
 
-    reader.readAsDataURL(targetFile);
-  };
+  //   reader.readAsDataURL(targetFile);
+  // };
 
-  const [isEditorOpened, setIsEditorOpened] = useState(false);
-  const handleEditor = () => {
-    setIsEditorOpened(true);
-  };
+  // const [isEditorOpened, setIsEditorOpened] = useState(false);
+  // const handleEditor = () => {
+  //   setIsEditorOpened(true);
+  // };
 
   return (
     <>
       <Container>
         <ImgBox>
-          <div onClick={handleEditor}>asdf</div>
-          {file === undefined ? (
+          {/* <div onClick={handleEditor}>asdf</div> */}
+          {/* {file === undefined ? ( */}
             <>
-              <div className="sub-flex">
+              {/* <div className="sub-flex">
                 <BlankBox />
                 <div>Click to add a photo</div>
                 <input
@@ -59,9 +59,9 @@ const Image = () => {
                   onChange={selectImg}
                 />
               </div>
-              <div className="sub-flex">Open Image Editor</div>
+              <div className="sub-flex">Open Image Editor</div> */}
             </>
-          ) : (
+          {/* ) : ( */}
             <img
               id="image"
               alt={""}
@@ -69,15 +69,15 @@ const Image = () => {
                 objectFit: "cover",
                 display: "flex",
                 margin: "0 auto",
-                width: "30rem",
+                width: "50rem",
               }}
               src={previewURL as string}
             />
-          )}
+          {/* )} */}
         </ImgBox>
         {/* <Menu /> */}
       </Container>
-      {isEditorOpened && <ToastEditor {...{ setPreviewURL }} />}
+      {/* {isEditorOpened && <ToastEditor {...{ setPreviewURL, setIsImgAdded }} />} */}
     </>
   );
 };

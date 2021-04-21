@@ -3,28 +3,28 @@ import ImageEditor from "@toast-ui/react-image-editor";
 import { useEffect, useState } from "react";
 import "tui-image-editor/dist/tui-image-editor.css";
 
-const ToastEditor = ({ setPreviewURL }) => {
-  const [lowerCanvas, setLowerCanvas] = useState<HTMLCanvasElement>();
-  const [upperCanvas, setUpperCanvas] = useState<HTMLCanvasElement>();
-  // console.log(
-  //   document.getElementsByClassName("lower-canvas")[0]?.toDataURL("image/png")
-  // );
-  console.log("s");
+const ToastEditor = ({ setPreviewURL, setIsImgAdded }) => {
+  // const [lowerCanvas, setLowerCanvas] = useState<HTMLCanvasElement>();
+  // const [upperCanvas, setUpperCanvas] = useState<HTMLCanvasElement>();
+  // // console.log(
+  // //   document.getElementsByClassName("lower-canvas")[0]?.toDataURL("image/png")
+  // // );
+  // console.log("s");
 
-  // const [upperCanvas, setUpperCanvas] = useState(
-  //   document.getElementsByClassName("upper-canvas ")[0]
-  // );
+  // // const [upperCanvas, setUpperCanvas] = useState(
+  // //   document.getElementsByClassName("upper-canvas ")[0]
+  // // );
 
-  useEffect(() => {
-    window?.addEventListener("click", () => {
-      setLowerCanvas(
-        document.getElementsByClassName("lower-canvas")[0] as HTMLCanvasElement
-      );
-      setUpperCanvas(
-        document.getElementsByClassName("upper-canvas")[0] as HTMLCanvasElement
-      );
-    });
-  }, []);
+  // useEffect(() => {
+  //   window?.addEventListener("click", () => {
+  //     setLowerCanvas(
+  //       document.getElementsByClassName("lower-canvas")[0] as HTMLCanvasElement
+  //     );
+  //     setUpperCanvas(
+  //       document.getElementsByClassName("upper-canvas")[0] as HTMLCanvasElement
+  //     );
+  //   });
+  // }, []);
 
   // useEffect(() => {
   //   const img = lowerCanvas?.toDataURL("image/png");
@@ -54,7 +54,10 @@ const ToastEditor = ({ setPreviewURL }) => {
   // }, [lowerCanvas?.toDataURL("image/png")]);
 
   const handleEnd = () => {
+    const lowerCanvas = document.getElementsByClassName("lower-canvas")[0] as HTMLCanvasElement;
     setPreviewURL(lowerCanvas.toDataURL("image/png"));
+    console.log('asdf')
+    setIsImgAdded(true);
   };
 
   return (
