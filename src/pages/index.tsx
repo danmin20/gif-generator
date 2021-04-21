@@ -18,14 +18,39 @@ const Index = () => {
       <Header />
 
       {!isImgAdded ? (
-        <button className="open-button" onClick={() => setIsEditorOpened(true)}>
-          asdf
-        </button>
+        <div
+          style={{
+            height: "80vh",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <button
+            className="open-button"
+            onClick={() => setIsEditorOpened(true)}
+          >
+            Open Image Editor
+          </button>
+        </div>
       ) : (
-        <Image {...{ previewURL, setPreviewURL }} />
+        !isEditorOpened && (
+          <>
+            <div style={{ position: "fixed", top: "5rem" }}>
+              <button
+                className="open-button"
+                onClick={() => setIsEditorOpened(true)}
+              >
+                Change Image
+              </button>
+            </div>
+            <Image {...{ previewURL, setPreviewURL }} />
+          </>
+        )
       )}
-      {isEditorOpened && !isImgAdded && (
-        <ToastEditor {...{ setPreviewURL, setIsImgAdded }} />
+      {isEditorOpened && (
+        <ToastEditor {...{ setPreviewURL, setIsImgAdded, setIsEditorOpened }} />
       )}
     </Container>
   );
@@ -36,6 +61,23 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   .open-button {
+    margin-top: 3rem;
+    padding: 0.5rem 2rem;
+    display: flex;
+    align-items: center;
+    transition: 0.3s;
+    :hover {
+      font-size: 1.1rem;
+      transition: 0.3s;
+    }
+    ::before {
+      width: 2.315rem;
+      content: "+";
+      font-size: 2rem;
+      margin-right: 1rem;
+      box-shadow: ${({ theme }) => theme.boxShadow.normal};
+      border-radius: 50%;
+    }
   }
 `;
 

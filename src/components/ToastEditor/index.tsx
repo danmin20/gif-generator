@@ -1,9 +1,10 @@
 /// <reference path="react-image-editor.d.ts" />
 import ImageEditor from "@toast-ui/react-image-editor";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import "tui-image-editor/dist/tui-image-editor.css";
 
-const ToastEditor = ({ setPreviewURL, setIsImgAdded }) => {
+const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
   // const [lowerCanvas, setLowerCanvas] = useState<HTMLCanvasElement>();
   // const [upperCanvas, setUpperCanvas] = useState<HTMLCanvasElement>();
   // // console.log(
@@ -54,15 +55,20 @@ const ToastEditor = ({ setPreviewURL, setIsImgAdded }) => {
   // }, [lowerCanvas?.toDataURL("image/png")]);
 
   const handleEnd = () => {
-    const lowerCanvas = document.getElementsByClassName("lower-canvas")[0] as HTMLCanvasElement;
+    const lowerCanvas = document.getElementsByClassName(
+      "lower-canvas"
+    )[0] as HTMLCanvasElement;
     setPreviewURL(lowerCanvas.toDataURL("image/png"));
-    console.log('asdf')
+    console.log("asdf");
     setIsImgAdded(true);
+    setIsEditorOpened(false);
   };
 
   return (
-    <>
-      <div onClick={handleEnd}>asdf</div>
+    <Container>
+      <div onClick={handleEnd} className="upload">
+        Upload
+      </div>
       <ImageEditor
         includeUI={{
           loadImage: {
@@ -73,7 +79,7 @@ const ToastEditor = ({ setPreviewURL, setIsImgAdded }) => {
           menu: ["shape", "filter"],
           initMenu: "filter",
           uiSize: {
-            width: "1000px",
+            width: "100%",
             height: "700px",
           },
           menuBarPosition: "bottom",
@@ -86,8 +92,42 @@ const ToastEditor = ({ setPreviewURL, setIsImgAdded }) => {
         }}
         usageStatistics={true}
       />
-    </>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  position: fixed;
+  width: 90%;
+  top: 10rem;
+  border-radius: 1.5rem;
+  box-shadow: ${({ theme }) => theme.boxShadow.normal};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .upload {
+    font: 800 11.5px Arial;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 120px;
+    height: 40px;
+    background: red;
+    z-index: 10;
+    border-radius: 20px;
+    margin: 8px;
+    background-color: #fdba3b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .tui-image-editor-container {
+    border-radius: 1.5rem;
+  }
+  .tui-image-editor-container .tui-image-editor-help-menu.top {
+    top: 2rem;
+  }
+`;
 
 export default ToastEditor;
