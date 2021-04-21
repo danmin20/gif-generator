@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Image = () => {
   const [file, setFile] = useState(undefined);
-  const [previewURL, setPreviewURL] = useState("");
+  const [previewURL, setPreviewURL] = useState<string | ArrayBuffer>("");
 
   //   const uploadImage = (file) => {
   //     if (!file) {
@@ -29,32 +29,41 @@ const Image = () => {
       <ImgBox>
         {file === undefined ? (
           <>
-            <BlankBox />
-            <div>Click to add a photo</div>
-            <input
-              type="file"
-              style={{
-                marginTop: "5px",
-                position: "absolute",
-                zIndex: 0,
-                width: "90%",
-                height: "100%",
-                border: "none",
-                cursor: "pointer",
-                outline: "none",
-              }}
-              onChange={selectImg}
-            />
+            <div className="sub-flex">
+              <BlankBox />
+              <div>Click to add a photo</div>
+              <input
+                type="file"
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  paddingLeft: 0,
+                  zIndex: 0,
+                  width: "90%",
+                  height: "100%",
+                  border: "none",
+                  cursor: "pointer",
+                  outline: "none",
+                }}
+                onChange={selectImg}
+              />
+            </div>
+            <div className="sub-flex">Open Image Editor</div>
           </>
         ) : (
           <img
             alt={""}
-            style={{ objectFit: "cover", display: "flex", margin: "0 auto" }}
-            src={previewURL}
+            style={{
+              objectFit: "cover",
+              display: "flex",
+              margin: "0 auto",
+              width: "50rem",
+            }}
+            src={previewURL as string}
           />
         )}
       </ImgBox>
-      <Menu />
+      {/* <Menu /> */}
     </Container>
   );
 };
@@ -77,7 +86,6 @@ const Container = styled.div`
 `;
 const ImgBox = styled.div`
   position: relative;
-  width: 40rem;
   height: 30rem;
   background-color: white;
   box-shadow: ${({ theme }) => theme.boxShadow.normal};
@@ -87,6 +95,20 @@ const ImgBox = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 1rem;
+  display: flex;
+  flex: 0.6;
+  padding: 1rem 0;
+  .sub-flex {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    :first-child {
+      border-right: 1px solid ${({ theme }) => theme.color.gray};
+    }
+  }
 `;
 
 const Box = styled.div`

@@ -58,6 +58,13 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
+          <script src="libs/code-snippet.min.js"></script>
+          <script src="libs/jquery.min.js"></script>
+          <script src="libs/fabric.min.js"></script>
+          <script src="js/image-editor.js"></script>
+          <div id="my-image-editor">
+            <canvas></canvas>
+          </div>
         </body>
       </Html>
     );
