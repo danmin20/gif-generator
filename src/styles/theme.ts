@@ -1,4 +1,6 @@
-export const theme = {
+import { DefaultTheme } from "styled-components";
+
+export const theme: DefaultTheme = {
   color: {
     purple: "#8661de",
     blue: "#00bac7",
@@ -14,7 +16,8 @@ export const theme = {
   },
 };
 
-const customMediaQuery = (maxWidth) => `@media (max-width: ${maxWidth}px)`;
+const customMediaQuery = (maxWidth: number): string =>
+  `@media (max-width: ${maxWidth}px)`;
 
 export const media = {
   custom: customMediaQuery,
