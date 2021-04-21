@@ -1,6 +1,10 @@
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import styled from "styled-components";
 
+const ToastEditor = dynamic(() => import("components/ToastEditor"), {
+  ssr: false,
+});
 const Image = () => {
   const [file, setFile] = useState(undefined);
   const [previewURL, setPreviewURL] = useState<string | ArrayBuffer>("");
@@ -24,47 +28,57 @@ const Image = () => {
     reader.readAsDataURL(targetFile);
   };
 
+  const [isEditorOpened, setIsEditorOpened] = useState(false);
+  const handleEditor = () => {
+    setIsEditorOpened(true);
+  };
+
   return (
-    <Container>
-      <ImgBox>
-        {file === undefined ? (
-          <>
-            <div className="sub-flex">
-              <BlankBox />
-              <div>Click to add a photo</div>
-              <input
-                type="file"
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  paddingLeft: 0,
-                  zIndex: 0,
-                  width: "90%",
-                  height: "100%",
-                  border: "none",
-                  cursor: "pointer",
-                  outline: "none",
-                }}
-                onChange={selectImg}
-              />
-            </div>
-            <div className="sub-flex">Open Image Editor</div>
-          </>
-        ) : (
-          <img
-            alt={""}
-            style={{
-              objectFit: "cover",
-              display: "flex",
-              margin: "0 auto",
-              width: "50rem",
-            }}
-            src={previewURL as string}
-          />
-        )}
-      </ImgBox>
-      {/* <Menu /> */}
-    </Container>
+    <>
+      <Container>
+        <ImgBox>
+          <div onClick={handleEditor}>asdf</div>
+          {file === undefined ? (
+            <>
+              <div className="sub-flex">
+                <BlankBox />
+                <div>Click to add a photo</div>
+                <input
+                  type="file"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    paddingLeft: 0,
+                    zIndex: 0,
+                    width: "90%",
+                    height: "100%",
+                    border: "none",
+                    cursor: "pointer",
+                    outline: "none",
+                  }}
+                  onChange={selectImg}
+                />
+              </div>
+              <div className="sub-flex">Open Image Editor</div>
+            </>
+          ) : (
+            <img
+              id="image"
+              alt={""}
+              style={{
+                objectFit: "cover",
+                display: "flex",
+                margin: "0 auto",
+                width: "30rem",
+              }}
+              src={previewURL as string}
+            />
+          )}
+        </ImgBox>
+        {/* <Menu /> */}
+      </Container>
+      {isEditorOpened && <ToastEditor {...{ setPreviewURL }} />}
+    </>
   );
 };
 

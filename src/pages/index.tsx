@@ -11,7 +11,7 @@ const Index = () => (
   <Container>
     <Header />
     <Image />
-    <ToastEditor />
+    {/* <ToastEditor /> */}
   </Container>
 );
 
