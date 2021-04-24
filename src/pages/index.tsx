@@ -3,6 +3,7 @@ import Image from "components/Image";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useState } from "react";
+import GifEditor from "components/GifEditor";
 
 const ToastEditor = dynamic(() => import("components/ToastEditor"), {
   ssr: false,
@@ -46,6 +47,7 @@ const Index = () => {
               </button>
             </div>
             <Image {...{ previewURL, setPreviewURL }} />
+            <GifEditor {...{ previewURL }} />
           </>
         )
       )}

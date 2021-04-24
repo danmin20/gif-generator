@@ -59,7 +59,7 @@ const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
       "lower-canvas"
     )[0] as HTMLCanvasElement;
     setPreviewURL(lowerCanvas.toDataURL("image/png"));
-    console.log("asdf");
+    // console.log("asdf");
     setIsImgAdded(true);
     setIsEditorOpened(false);
   };
@@ -126,7 +126,11 @@ const Container = styled.div`
     border-radius: 1.5rem;
   }
   .tui-image-editor-container .tui-image-editor-help-menu.top {
-    top: 2rem;
+    left: 19rem;
+    top: 1rem;
+  }
+  .tui-image-editor-header-logo {
+    display: none;
   }
 `;
 

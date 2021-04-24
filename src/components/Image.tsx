@@ -7,7 +7,7 @@ const ToastEditor = dynamic(() => import("components/ToastEditor"), {
 });
 const Image = ({ previewURL, setPreviewURL }) => {
   const [file, setFile] = useState(undefined);
-  console.log("previewURL", previewURL);
+  // console.log("previewURL", previewURL);
 
   //   const uploadImage = (file) => {
   //     if (!file) {

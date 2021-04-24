@@ -1367,6 +1367,11 @@
   resolved "https://registry.yarnpkg.com/@types/aria-query/-/aria-query-4.2.1.tgz#78b5433344e2f92e8b306c06a5622c50c245bf6b"
   integrity sha512-S6oPal772qJZHoRZLFc/XoZW2gFvwXusYUmXPXkgxJLuEk2vOt7jc4Yo6z/vtI0EBkbPBVrJJ0B+prLIKiWqHg==
 
+"@types/fabric@^4.2.5":
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/@types/fabric/-/fabric-4.2.5.tgz#095e412b49c896e2fa0d441bd2fceb6690074c4d"
+  integrity sha512-nifrrxvgsYRoxNJB+xZUBe6pLWoqGbZdfwJ0y9zzdt3uU89SzP+8L9Whwrxbvu7eIXjPArSZOyuQmbD4zewdZA==
+
 "@types/hoist-non-react-statics@*":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
@@ -3086,7 +3091,7 @@ extsprintf@^1.2.0:
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
-fabric@^4.2.0:
+fabric@^4.2.0, fabric@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/fabric/-/fabric-4.4.0.tgz#2b73454008b8082f2d234c4637bdf645876c490c"
   integrity sha512-mX6BZqssJjrT6LN1B4Wcmgm93NIlmKfPN5qTqon9wdDJgRAxPfrhfz2iT+QmDso9P8+s0qyLXFhuVpxOBBMHEw==
