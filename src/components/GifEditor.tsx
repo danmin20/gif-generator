@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { fabric } from "fabric";
 import styled from "styled-components";
 
 const GifEditor = ({ previewURL }) => {
