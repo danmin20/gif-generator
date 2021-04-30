@@ -1,4 +1,6 @@
 import GIF from "gifencoder";
+import { fabric } from "fabric";
+import Component from "./components";
 
 class GifGenerator {
   constructor(canvas) {
@@ -13,16 +15,38 @@ class GifGenerator {
     this.gif.setQuality(10);
   }
 
-  addFrame(delay = 0) {
+  _addFrame(delay = 0) {
     this.gif.setDelay(delay);
     this.gif.addFrame(this.canvas.getContext());
   }
 
-  render() {
+  _render() {
     this.gif.finish();
     const byte = new Uint8Array(this.gif.out.data);
 
     return new Blob([byte], { type: "image/gif" });
+  }
+
+  make() {
+    const fabricObjs = this.canvas.getObjects();
+    const objs = [];
+
+    fabricObjs.map((fabricObj) => {
+      if (fabricObj instanceof fabric.Path) {
+        objs.push(new Component.Brush(fabricObj));
+      } else if (fabricObj.text !== undefined) {
+        objs.push(new Component.Text(fabricObj));
+      }
+    });
+
+    objs.map((obj) => {
+      while (!obj.end()) {
+        console.log(obj.getCurrentFabricObject());
+        obj.next();
+      }
+    });
+
+    console.log(objs);
   }
 }
 
