@@ -29,7 +29,7 @@ class Brush extends ComponentInterface {
   }
 
   next() {
-    return this.addState(10);
+    return this.addState(30);
   }
 }
 
