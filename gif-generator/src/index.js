@@ -1,5 +1,5 @@
 import GIF from "gifencoder";
-import {fabric} from "fabric"
+import { fabric } from "fabric";
 import Component from "./components";
 
 class GifGenerator {
@@ -30,14 +30,21 @@ class GifGenerator {
   make() {
     const fabricObjs = this.canvas.getObjects();
     const objs = [];
-    
+
     fabricObjs.map((fabricObj) => {
-      if(fabricObj instanceof fabric.Path) {
-        objs.push(new Component.Brush(fabricObj))
-      } else if(fabricObj.text !== undefined) {
-        objs.push(new Component.Text(fabricObj))
+      if (fabricObj instanceof fabric.Path) {
+        objs.push(new Component.Brush(fabricObj));
+      } else if (fabricObj.text !== undefined) {
+        objs.push(new Component.Text(fabricObj));
       }
-    })
+    });
+
+    objs.map((obj) => {
+      while (!obj.end()) {
+        console.log(obj.getCurrentFabricObject());
+        obj.next();
+      }
+    });
 
     console.log(objs);
   }
