@@ -63,6 +63,30 @@
       setTimeout(function () {
         gifGenerator = new GifGenerator(imageEditor._graphics.getCanvas());
       }, 1000);
+      function render() {
+        gifGenerator.make().then(
+          (blob) => {
+            window.open(window.URL.createObjectURL(blob));
+          },
+          (error) => {
+            alert(error);
+          }
+        );
+      }
     </script>
+    <button
+      style="
+        position: absolute;
+        top: 70px;
+        right: 70px;
+        border: 1px solid #fff;
+        background: rgba(0, 0, 0, 0);
+        color: #fff;
+        padding: 10px 20px;
+      "
+      onClick="render();"
+    >
+      GIF 생성
+    </button>
   </body>
 </html>
