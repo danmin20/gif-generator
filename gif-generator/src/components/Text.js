@@ -14,8 +14,14 @@ class Text extends ComponentInterface {
       splited: textSplited,
     };
     this.position = {
-      top: fabricObj.top,
-      left: fabricObj.left,
+      top:
+        fabricObj.originY == "center"
+          ? fabricObj.top - fabricObj.height / 2
+          : fabricObj.top,
+      left:
+        fabricObj.originX == "center"
+          ? fabricObj.left - fabricObj.width / 2
+          : fabricObj.left,
     };
     this.font = {
       size: fabricObj.fontSize,
@@ -33,6 +39,8 @@ class Text extends ComponentInterface {
       {
         top: this.position.top,
         left: this.position.left,
+        originX: "left",
+        originY: "top",
         fontFamily: this.font.family,
         fontSize: this.font.size,
         fontWeight: this.font.weight,
