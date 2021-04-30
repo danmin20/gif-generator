@@ -34,17 +34,38 @@ class GifGenerator {
     fabricObjs.map((fabricObj) => {
       if (fabricObj instanceof fabric.Path) {
         objs.push(new Component.Brush(fabricObj));
+        this.canvas.remove(fabricObj);
       } else if (fabricObj.text !== undefined) {
         objs.push(new Component.Text(fabricObj));
+        this.canvas.remove(fabricObj);
       }
     });
 
-    objs.map((obj) => {
-      while (!obj.end()) {
-        console.log(obj.getCurrentFabricObject());
-        obj.next();
-      }
-    });
+    if (objs.length > 0) {
+      let objIdx = 0;
+      let isAddMode = true;
+      const draw = () => {
+        const obj = objs[objIdx];
+        if (isAddMode) {
+          const fabricObj = obj.getCurrentFabricObject();
+          obj.next();
+          if (obj.end()) {
+            if (objIdx < objs.length - 1) objIdx++;
+            else this.canvas.off("after:render", draw);
+          } else {
+            isAddMode = false;
+          }
+          this.canvas.add(fabricObj);
+        } else {
+          this.canvas.remove(
+            this.canvas._objects[this.canvas._objects.length - 1]
+          );
+          isAddMode = true;
+        }
+      };
+      this.canvas.on("after:render", draw);
+      draw();
+    }
 
     console.log(objs);
   }
