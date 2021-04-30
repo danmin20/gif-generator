@@ -22,6 +22,9 @@ class Brush extends ComponentInterface {
     return new fabric.Path(paths, {
       stroke: this.color.getRgba(),
       strokeWidth: this.size,
+      fill: null,
+      strokeLineCap: "round",
+      strokeLineJoin: "round",
     });
   }
 
