@@ -8,10 +8,6 @@ class Brush extends ComponentInterface {
     this.color = new Color(fabricObj.stroke);
     this.paths = fabricObj.path;
     this.size = fabricObj.strokeWidth;
-    this.position = {
-      top: fabricObj.top,
-      left: fabricObj.left,
-    };
   }
 
   getCurrentFabricObject() {
@@ -24,8 +20,6 @@ class Brush extends ComponentInterface {
       paths[paths.length - 1][0] = "L";
     }
     return new fabric.Path(paths, {
-      top: this.position.top,
-      left: this.position.left,
       stroke: this.color.getRgba(),
       strokeWidth: this.size,
     });
