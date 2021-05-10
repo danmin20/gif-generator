@@ -54,14 +54,25 @@ const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
   //   }
   // }, [lowerCanvas?.toDataURL("image/png")]);
 
+  const [alertIsShown, setAlertIsShown] = useState(false);
+
   const handleEnd = () => {
     const lowerCanvas = document.getElementsByClassName(
       "lower-canvas"
     )[0] as HTMLCanvasElement;
-    setPreviewURL(lowerCanvas.toDataURL("image/png"));
-    // console.log("asdf");
-    setIsImgAdded(true);
-    setIsEditorOpened(false);
+    if (
+      lowerCanvas.toDataURL("image/png") ===
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAAEYklEQVR4Xu3UAQkAAAwCwdm/9HI83BLIOdw5AgQIRAQWySkmAQIEzmB5AgIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlAABg+UHCBDICBisTFWCEiBgsPwAAQIZAYOVqUpQAgQMlh8gQCAjYLAyVQlKgIDB8gMECGQEDFamKkEJEDBYfoAAgYyAwcpUJSgBAgbLDxAgkBEwWJmqBCVAwGD5AQIEMgIGK1OVoAQIGCw/QIBARsBgZaoSlACBB1YxAJfjJb2jAAAAAElFTkSuQmCC"
+    ) {
+      setAlertIsShown(true);
+      setTimeout(() => {
+        setAlertIsShown(false);
+      }, 1000);
+    } else {
+      setPreviewURL(lowerCanvas.toDataURL("image/png"));
+      setIsImgAdded(true);
+      setIsEditorOpened(false);
+    }
   };
 
   return (
@@ -92,6 +103,9 @@ const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
         }}
         usageStatistics={true}
       />
+      <div className="alert" style={{ opacity: alertIsShown ? 1 : 0 }}>
+        Please select a photo.
+      </div>
     </Container>
   );
 };
@@ -121,6 +135,12 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+  }
+  .alert {
+    position: fixed;
+    border-radius: 0.5rem;
+    transition: 1s;
+    top: 7rem;
   }
   .tui-image-editor-container {
     border-radius: 1.5rem;
