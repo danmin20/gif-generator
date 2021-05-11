@@ -1,4 +1,4 @@
 module.exports = {
 	Busboy:require('busboy'),
-	UUID:require('uuid')
+	UUID:require('uuid-random')
 }
