@@ -2,7 +2,7 @@ import GIF from "gifencoder";
 import { fabric } from "fabric";
 import Component from "./components";
 
-class GifGenerator {
+export class GifGenerator {
   constructor(canvas) {
     this.canvas = canvas;
     this.width = canvas.getWidth();
