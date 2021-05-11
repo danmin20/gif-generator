@@ -135,13 +135,6 @@ const Box = styled.div`
   background-color: white;
   box-shadow: ${({ theme }) => theme.boxShadow.normal};
 `;
-const BlankBox = styled.div`
-  z-index: 1;
-  position: absolute;
-  top: 0;
-  width: 90%;
-  height: 50px;
-  background-color: white;
-`;
+
 
 export default Image;
