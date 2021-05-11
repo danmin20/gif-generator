@@ -27,3 +27,6 @@ out
 
 node_modules.nosync/
 *.env.*
+
+package-lock.json
+yarn.lock
