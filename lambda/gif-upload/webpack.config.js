@@ -4,7 +4,7 @@ module.exports = {
   entry: './src/import.js',
   output: {
     path: __dirname + '/dist',
-    filename: 'bundle.js',
+    filename: 'import.js',
 	library: 'import',
 	libraryTarget: 'commonjs2'
   },
