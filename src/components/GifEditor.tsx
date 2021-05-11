@@ -64,6 +64,42 @@ const GifEditor = ({ previewURL }) => {
     );
   };
 
+  // useEffect(() => {
+  //   // const img = lowerCanvas?.toDataURL("image/png");
+  //   // const uploaded = document.getElementById("image");
+  //   // console.log(uploaded);
+  //   // let w = window.open();
+  //   // if (w?.window) w.document.body.innerHTML = "<img src='" + img + "'>";
+  //   const image = new Image();
+  //   // image.onload = function () {
+  //   //   lowerCanvas.width = uploaded.clientWidth;
+  //   //   lowerCanvas.height = uploaded.clientHeight;
+  //   //   lowerCanvas?.getContext("2d").drawImage(image, 0, 0);
+  //   // };
+  //   image.src = previewURL;
+  //   console.log("canvascontext", canvas?.getContext);
+  //   if (canvas?.getContext) {
+  //     console.log('왜안돼')
+  //     image.onload = function () {
+  //       canvas.width = 1000;
+  //       canvas.height = 572;
+  //       canvas?.getContext("2d").drawImage(image, 0, 0);
+  //     };
+  //     // console.log(canvas.getContext("2d"));
+  //   }
+  // }, [canvas]);
+
+  const render = () => {
+    gifGenerator.make().then(
+      (blob) => {
+        window.open(window.URL.createObjectURL(blob));
+      },
+      (error) => {
+        alert(error);
+      }
+    );
+  };
+
   return (
     <Container>
       <div onClick={render} className="upload">
