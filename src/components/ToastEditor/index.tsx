@@ -3,6 +3,7 @@ import ImageEditor from "@toast-ui/react-image-editor";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import "tui-image-editor/dist/tui-image-editor.css";
+import { GifGenerator } from "gif-generator/src/index";
 
 const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
   // const [lowerCanvas, setLowerCanvas] = useState<HTMLCanvasElement>();
@@ -75,6 +76,30 @@ const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
     }
   };
 
+  // console.log('asdf',document
+  // .getElementsByClassName("tui-image-editor-container"))
+
+  // window.GifGenerator = GifGenerator;
+
+  // let gifGenerator;
+  // setTimeout(function () {
+  //   gifGenerator = new GifGenerator(
+  //     document
+  //       .getElementsByClassName("tui-image-editor-container")
+  //       ._graphics.getCanvas()
+  //   );
+  // }, 1000);
+  // function render() {
+  //   gifGenerator.make().then(
+  //     (blob) => {
+  //       window.open(window.URL.createObjectURL(blob));
+  //     },
+  //     (error) => {
+  //       alert(error);
+  //     }
+  //   );
+  // }
+
   return (
     <Container>
       <div onClick={handleEnd} className="upload">
@@ -87,11 +112,10 @@ const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
             name: "SampleImage",
           },
           //   theme: myTheme,
-          menu: ["shape", "filter"],
           initMenu: "filter",
           uiSize: {
             width: "100%",
-            height: "700px",
+            height: "600px",
           },
           menuBarPosition: "bottom",
         }}

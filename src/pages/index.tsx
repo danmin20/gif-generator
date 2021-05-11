@@ -36,20 +36,7 @@ const Index = () => {
           </button>
         </div>
       ) : (
-        !isEditorOpened && (
-          <>
-            <div style={{ position: "fixed", top: "5rem" }}>
-              <button
-                className="open-button"
-                onClick={() => setIsEditorOpened(true)}
-              >
-                Change Image
-              </button>
-            </div>
-            <Image {...{ previewURL, setPreviewURL }} />
-            <GifEditor {...{ previewURL }} />
-          </>
-        )
+        !isEditorOpened && <GifEditor {...{ previewURL }} />
       )}
       {isEditorOpened && (
         <ToastEditor {...{ setPreviewURL, setIsImgAdded, setIsEditorOpened }} />
