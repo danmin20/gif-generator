@@ -7,6 +7,7 @@
 - Method : POST
 - Content-Type : multipart/form-data
 - Body : gif=<file>
+
 ### response
 - 200 : { id: <id> }
 - 400 : no gif
@@ -17,6 +18,7 @@
 - endpoint : /
 - Method : GET
 - QueryString : id=<id>
+
 ### response
 - 200 : Content-type:image/gif
 - 400 : no id
