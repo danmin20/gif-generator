@@ -6,10 +6,10 @@
 - endpoint : /
 - Method : POST
 - Content-Type : multipart/form-data
-- Body : gif=<file>
+- Body : gif=`<file>`
 
 ### response
-- 200 : { id: <id> }
+- 200 : { id: `<id>` }
 - 400 : no gif
 - 500 : server error
 
@@ -17,7 +17,7 @@
 ### request
 - endpoint : /
 - Method : GET
-- QueryString : id=<id>
+- QueryString : id=`<id>`
 
 ### response
 - 200 : Content-type:image/gif
