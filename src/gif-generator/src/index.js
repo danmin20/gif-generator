@@ -1,4 +1,4 @@
-import GIF from "gifencoder";
+import GIF from "@dhdbstjr98/gif.js";
 import { fabric } from "fabric";
 import Component from "./components";
 
@@ -12,23 +12,24 @@ export class GifGenerator {
   }
 
   _initializeGif() {
-    this.gif = new GIF(this.width, this.height);
-    this.gif.setTransparent(null);
-    this.gif.setRepeat(0);
-    this.gif.setQuality(10);
-    this.gif.start();
+    this.gif = new GIF({
+      width: this.width,
+      height: this.height,
+      transparent: null,
+      repeat: 0,
+      setQuality: 10,
+    });
   }
 
   _addFrame(delay = 0) {
-    this.gif.setDelay(delay);
-    this.gif.addFrame(this.canvas.getContext());
+    this.gif.addFrame(this.canvas.getContext(), { delay, copy: true });
   }
 
-  _render() {
-    this.gif.finish();
-    const byte = new Uint8Array(this.gif.out.data);
-
-    return new Blob([byte], { type: "image/gif" });
+  _render(callback) {
+    this.gif.on("finished", (blob) => {
+      callback(blob);
+    });
+    this.gif.render();
   }
 
   make() {
@@ -67,7 +68,7 @@ export class GifGenerator {
                 draw();
               } else {
                 this.canvas.off("after:render", draw);
-                resolve(this._render());
+                this._render(resolve);
               }
             } else {
               this.canvas.remove(
