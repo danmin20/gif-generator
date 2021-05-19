@@ -1,32 +1,84 @@
 import { useEffect, useRef, useState } from "react";
-import { fabric } from "fabric";
 import styled from "styled-components";
 import { GifGenerator } from "gif-generator/src";
-import ImageEditor from "@toast-ui/react-image-editor";
+import TuiImageEditor from "tui-image-editor";
 
 const GifEditor = ({ previewURL }) => {
-  const [canvas, setCanvas] = useState<HTMLCanvasElement>();
-  const [gifGenerator, setGifGenerator] = useState(null);
+  // const [canvas, setCanvas] = useState<HTMLCanvasElement>();
+  // const [gifGenerator, setGifGenerator] = useState(null);
+  const [imageEditor, setImageEditor] = useState(null);
+
+  const rootEl = useRef();
 
   useEffect(() => {
+    // if (window) {
+    //   setCanvas(
+    //     document.getElementsByClassName(
+    //       "tui-image-editor-container"
+    //     )[0] as HTMLCanvasElement
+    //   );
+    //   console.log(
+    //     document.getElementsByClassName(
+    //       "tui-image-editor-container"
+    //     )[0] as HTMLCanvasElement
+    //   );
+    // }
+
     if (window) {
-      setCanvas(
-        document.getElementsByClassName(
-          "tui-image-editor-container"
-        )[0] as HTMLCanvasElement
+      setImageEditor(
+        new TuiImageEditor(rootEl.current, {
+          includeUI: {
+            loadImage: {
+              path: previewURL,
+              name: "SampleImage",
+            },
+            uiSize: {
+              width: "100%",
+              height: "600px",
+            },
+            initMenu: "filter",
+            menuBarPosition: "bottom",
+          },
+          cssMaxWidth: 500,
+          cssMaxHeight: 700,
+          usageStatistics: false,
+        })
       );
     }
   }, []);
-  console.log(
-    "asdf",
-    document.getElementsByClassName("tui-image-editor-container")
-  );
-  console.log("canvas", canvas);
-  console.log('useref',useRef.arguments)
 
-  useEffect(()=>{
-    if(canvas)setGifGenerator(new GifGenerator(canvas._graphics.getCanvas()));
-  }, [canvas])
+  useEffect(() => {
+    if (imageEditor) {
+      // setGifGenerator(new GifGenerator(imageEditor._graphics.getCanvas()));
+      console.log(imageEditor._graphics.getCanvas().getObjects());
+    }
+  }, [imageEditor]);
+
+  const render = () => {
+    console.log("aaa", imageEditor._graphics.getCanvas().getObjects());
+    const gifGenerator = new GifGenerator(imageEditor._graphics.getCanvas());
+    gifGenerator.make().then(
+      (blob) => {
+        window.open(window.URL.createObjectURL(blob));
+      },
+      (error) => {
+        alert(error);
+      }
+    );
+  };
+
+  // useEffect(() => {
+  //   // if (canvas) setGifGenerator(new GifGenerator(canvas._graphics.getCanvas()));
+  //   if (canvas) {
+  //     console.log("aaaaa", canvas);
+  //   }
+  // }, [canvas]);
+
+  // useEffect(() => {
+  //   if (window) {
+  //     setCanvas(document.getElementById("gif-canvas") as HTMLCanvasElement);
+  //   }
+  // }, []);
 
   // useEffect(() => {
   //   // const img = lowerCanvas?.toDataURL("image/png");
@@ -43,7 +95,7 @@ const GifEditor = ({ previewURL }) => {
   //   image.src = previewURL;
   //   console.log("canvascontext", canvas?.getContext);
   //   if (canvas?.getContext) {
-  //     console.log('왜안돼')
+  //     console.log("왜안돼");
   //     image.onload = function () {
   //       canvas.width = 1000;
   //       canvas.height = 572;
@@ -53,55 +105,47 @@ const GifEditor = ({ previewURL }) => {
   //   }
   // }, [canvas]);
 
-  const render = () => {
-    gifGenerator.make().then(
-      (blob) => {
-        window.open(window.URL.createObjectURL(blob));
-      },
-      (error) => {
-        alert(error);
-      }
-    );
-  };
-
   return (
-    <Container>
-      <div onClick={render} className="upload">
-        Save
-      </div>
-      <ImageEditor
-        includeUI={{
-          loadImage: {
-            path: previewURL,
-            name: "SampleImage",
-          },
-          menu: ["draw", "text"],
-          initMenu: "draw",
-          uiSize: {
-            width: "100%",
-            height: "600px",
-          },
-          menuBarPosition: "bottom",
-        }}
-        cssMaxHeight={500}
-        cssMaxWidth={700}
-        selectionStyle={{
-          cornerSize: 20,
-          rotatingPointOffset: 70,
-        }}
-        usageStatistics={true}
-      />
-      <div className="alert">Please select a photo.</div>
-    </Container>
-    // <Container>
-    //   <ImgBox>
-    //     <canvas id="gif-canvas" />
-    //   </ImgBox>
-    // </Container>
+    <>
+      <Wrapper>
+        <div onClick={render} className="upload">
+          Save
+        </div>
+        {/* <ImageEditor
+          includeUI={{
+            loadImage: {
+              path: previewURL,
+              name: "SampleImage",
+            },
+            menu: ["draw", "text"],
+            initMenu: "draw",
+            uiSize: {
+              width: "100%",
+              height: "600px",
+            },
+            menuBarPosition: "bottom",
+          }}
+          cssMaxHeight={500}
+          cssMaxWidth={700}
+          selectionStyle={{
+            cornerSize: 20,
+            rotatingPointOffset: 70,
+          }}
+          usageStatistics={true}
+        /> */}
+        <div ref={rootEl} />
+        <div className="alert">Please select a photo.</div>
+      </Wrapper>
+      {/* <Container>
+        <ImgBox>
+          <canvas id="gif-canvas" />
+        </ImgBox>
+      </Container> */}
+    </>
   );
 };
 
-const Container = styled.div`
+const Wrapper = styled.div`
   position: fixed;
   width: 90%;
   top: 10rem;
@@ -143,6 +187,27 @@ const Container = styled.div`
   .tui-image-editor-header-logo {
     display: none;
   }
+`;
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10rem;
+`;
+const ImgBox = styled.div`
+  position: relative;
+  width: 90%;
+  background-color: white;
+  box-shadow: ${({ theme }) => theme.boxShadow.normal};
+  border-radius: 2rem;
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  display: flex;
+  padding: 1rem 0;
 `;
 
 export default GifEditor;
