@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { GifGenerator } from "gif-generator/src";
 import TuiImageEditor from "tui-image-editor";
+import "gif-generator/dist/gif-generator";
 
 const GifEditor = ({ previewURL }) => {
   // const [canvas, setCanvas] = useState<HTMLCanvasElement>();
@@ -59,6 +59,8 @@ const GifEditor = ({ previewURL }) => {
     const gifGenerator = new GifGenerator(imageEditor._graphics.getCanvas());
     gifGenerator.make().then(
       (blob) => {
+        console.log("blob", blob);
+        console.log(window.URL.createObjectURL(blob));
         window.open(window.URL.createObjectURL(blob));
       },
       (error) => {
