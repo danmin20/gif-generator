@@ -7,6 +7,7 @@ export class GifGenerator {
     this.canvas = canvas;
     this.width = canvas.getWidth();
     this.height = canvas.getHeight();
+    this.events = {};
 
     this._initializeGif();
   }
@@ -19,6 +20,12 @@ export class GifGenerator {
       repeat: 0,
       setQuality: 10,
     });
+
+    Object.keys(this.events).map((event) => {
+      this.events[event].map((callback) => {
+        this.gif.on(event, callback);
+      });
+    });
   }
 
   _addFrame(delay = 0) {
@@ -30,6 +37,11 @@ export class GifGenerator {
       callback(blob);
     });
     this.gif.render();
+  }
+
+  on(event, callback) {
+    if (!this.events[event]) this.events[event] = [];
+    this.events[event].push(callback);
   }
 
   make() {

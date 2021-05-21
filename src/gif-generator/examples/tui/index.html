@@ -59,11 +59,12 @@
         imageEditor.ui.resizeEditor();
       };
 
-      console.log('imageeiasdfasdf', imageEditor)
+      console.log("imageeiasdfasdf", imageEditor);
 
       let gifGenerator;
       setTimeout(function () {
         gifGenerator = new GifGenerator(imageEditor._graphics.getCanvas());
+        gifGenerator.on("progress", (p) => console.log(p));
       }, 1000);
       function render() {
         gifGenerator.make().then(
