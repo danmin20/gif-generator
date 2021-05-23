@@ -52,7 +52,7 @@ export class GifGenerator {
     const objs = [];
 
     fabricObjs.map((fabricObj) => {
-      if (fabricObj instanceof fabric.Path) {
+      if (fabricObj.path !== undefined) {
         objs.push(new Component.Brush(fabricObj));
         this.canvas.remove(fabricObj);
       } else if (fabricObj.text !== undefined) {
