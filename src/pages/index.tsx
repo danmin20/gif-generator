@@ -1,10 +1,12 @@
 import Header from "components/Header";
-import Image from "components/Image";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
 const ToastEditor = dynamic(() => import("components/ToastEditor"), {
+  ssr: false,
+});
+const GifEditor = dynamic(() => import("components/GifEditor"), {
   ssr: false,
 });
 
@@ -35,19 +37,7 @@ const Index = () => {
           </button>
         </div>
       ) : (
-        !isEditorOpened && (
-          <>
-            <div style={{ position: "fixed", top: "5rem" }}>
-              <button
-                className="open-button"
-                onClick={() => setIsEditorOpened(true)}
-              >
-                Change Image
-              </button>
-            </div>
-            <Image {...{ previewURL, setPreviewURL }} />
-          </>
-        )
+        !isEditorOpened && <GifEditor {...{ previewURL }} />
       )}
       {isEditorOpened && (
         <ToastEditor {...{ setPreviewURL, setIsImgAdded, setIsEditorOpened }} />
