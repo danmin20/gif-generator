@@ -1,6 +1,4 @@
-import { getGif } from "api";
 import { useRouter } from "next/dist/client/router";
-import { useEffect, useState } from "react";
 
 const Detail = () => {
   const id = useRouter().query.id;

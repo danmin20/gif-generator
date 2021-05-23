@@ -1,60 +1,10 @@
 /// <reference path="react-image-editor.d.ts" />
 import ImageEditor from "@toast-ui/react-image-editor";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import "tui-image-editor/dist/tui-image-editor.css";
-import { GifGenerator } from "gif-generator/src/index";
 
 const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
-  // const [lowerCanvas, setLowerCanvas] = useState<HTMLCanvasElement>();
-  // const [upperCanvas, setUpperCanvas] = useState<HTMLCanvasElement>();
-  // // console.log(
-  // //   document.getElementsByClassName("lower-canvas")[0]?.toDataURL("image/png")
-  // // );
-  // console.log("s");
-
-  // // const [upperCanvas, setUpperCanvas] = useState(
-  // //   document.getElementsByClassName("upper-canvas ")[0]
-  // // );
-
-  // useEffect(() => {
-  //   window?.addEventListener("click", () => {
-  //     setLowerCanvas(
-  //       document.getElementsByClassName("lower-canvas")[0] as HTMLCanvasElement
-  //     );
-  //     setUpperCanvas(
-  //       document.getElementsByClassName("upper-canvas")[0] as HTMLCanvasElement
-  //     );
-  //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   const img = lowerCanvas?.toDataURL("image/png");
-  //   const uploaded = document.getElementById("image");
-  //   console.log(uploaded);
-  //   // let w = window.open();
-  //   // if (w?.window) w.document.body.innerHTML = "<img src='" + img + "'>";
-  //   const image = new Image();
-  //   // image.onload = function () {
-  //   //   lowerCanvas.width = uploaded.clientWidth;
-  //   //   lowerCanvas.height = uploaded.clientHeight;
-  //   //   lowerCanvas?.getContext("2d").drawImage(image, 0, 0);
-  //   // };
-  //   image.src = previewURL;
-  //   console.log("b");
-  //   if (lowerCanvas?.getContext&&upperCanvas?.getContext) {
-  //     image.onload = function () {
-
-  //       lowerCanvas.width = 1000;
-  //       lowerCanvas.height = 572;
-  //       upperCanvas.width = 1000;
-  //       upperCanvas.height = 572;
-  //       lowerCanvas?.getContext("2d").drawImage(image, 0, 0);
-  //     };
-  //     console.log(lowerCanvas.getContext("2d"));
-  //   }
-  // }, [lowerCanvas?.toDataURL("image/png")]);
-
   const [alertIsShown, setAlertIsShown] = useState(false);
 
   const handleEnd = () => {
@@ -76,30 +26,6 @@ const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
     }
   };
 
-  // console.log('asdf',document
-  // .getElementsByClassName("tui-image-editor-container"))
-
-  // window.GifGenerator = GifGenerator;
-
-  // let gifGenerator;
-  // setTimeout(function () {
-  //   gifGenerator = new GifGenerator(
-  //     document
-  //       .getElementsByClassName("tui-image-editor-container")
-  //       ._graphics.getCanvas()
-  //   );
-  // }, 1000);
-  // function render() {
-  //   gifGenerator.make().then(
-  //     (blob) => {
-  //       window.open(window.URL.createObjectURL(blob));
-  //     },
-  //     (error) => {
-  //       alert(error);
-  //     }
-  //   );
-  // }
-
   return (
     <Container>
       <div onClick={handleEnd} className="upload">
@@ -108,10 +34,8 @@ const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
       <ImageEditor
         includeUI={{
           loadImage: {
-            // path: 'img/sampleImage.jpg',
             name: "SampleImage",
           },
-          //   theme: myTheme,
           initMenu: "filter",
           uiSize: {
             width: "100%",
