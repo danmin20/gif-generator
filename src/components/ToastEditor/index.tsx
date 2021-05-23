@@ -28,15 +28,14 @@ const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
 
   return (
     <Container>
-      <div onClick={handleEnd} className="upload">
-        Upload
+      <div onClick={handleEnd} className="move">
+        Move to Gif
       </div>
       <ImageEditor
         includeUI={{
           loadImage: {
             name: "SampleImage",
           },
-          initMenu: "filter",
           uiSize: {
             width: "100%",
             height: "600px",
@@ -67,7 +66,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  .upload {
+  .move {
     font: 800 11.5px Arial;
     position: absolute;
     right: 0;

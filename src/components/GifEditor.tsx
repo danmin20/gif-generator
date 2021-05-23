@@ -18,6 +18,10 @@ const GifEditor = ({ previewURL }) => {
   const [download, setDownload] = useState(null);
   const [blob, setBlob] = useState(null);
 
+  const [isMakeStarted, setIsMakeStarted] = useState(false);
+  const [isUploadLoading, setIsUploadLoading] = useState(false);
+  const [viewLink, setViewLink] = useState(null);
+
   useEffect(() => {
     if (window) {
       setImageEditor(
@@ -31,7 +35,7 @@ const GifEditor = ({ previewURL }) => {
               width: "100%",
               height: "600px",
             },
-            initMenu: "filter",
+            menu: ["draw", "text"],
             menuBarPosition: "bottom",
           },
           cssMaxWidth: 500,
@@ -48,16 +52,14 @@ const GifEditor = ({ previewURL }) => {
     }
   }, [imageEditor]);
 
-  const render = () => {
-    console.log("aaa", imageEditor._graphics.getCanvas().getObjects());
+  const makeGif = () => {
+    setIsMakeStarted(true);
     const gifGenerator = new window.GifGenerator(
       imageEditor._graphics.getCanvas()
     );
     gifGenerator.make().then(
       (blob) => {
         setBlob(blob);
-        console.log("blobaaa", blob);
-        // console.log(window.URL.createObjectURL(blob));
         setDownload(window.URL.createObjectURL(blob));
       },
       (error) => {
@@ -67,29 +69,51 @@ const GifEditor = ({ previewURL }) => {
   };
 
   const handleUpload = async () => {
-    const file = new File([blob], "file.gif");
+    setIsUploadLoading(true);
+    const file = new File([blob], "new_gif.gif");
     const formData = new FormData();
     formData.append("gif", file);
     const res = await postGif(formData);
     console.log(res);
+    setIsUploadLoading(false);
+    setViewLink(
+      `https://gif-generator.s3.ap-northeast-2.amazonaws.com//gif/${res.id}.gif`
+    );
   };
 
   return (
     <>
       <Wrapper>
-        {download && (
-          <div style={{ display: "flex" }}>
-            <a href={download} download="new_file_name.gif">
-              download
-            </a>
-            <div onClick={handleUpload}>server upload</div>
+        {((isMakeStarted && !download) || isUploadLoading) && (
+          <>
+            <div className="background" />
+            <div className="download">loading...</div>
+          </>
+        )}
+        {!isUploadLoading && viewLink && (
+          <div className="download" style={{ zIndex: 200 }}>
+            <a href={viewLink}>{viewLink}</a>
           </div>
         )}
-        <div onClick={render} className="upload">
-          Save
+        {download && !isUploadLoading && (
+          <>
+            <div className="background" />
+            <div className="download">
+              <div className="download__btn">
+                <a href={download} download="new_gif.gif">
+                  Download a File
+                </a>
+              </div>
+              <div className="download__btn">
+                <div onClick={handleUpload}>Upload to Server</div>
+              </div>
+            </div>
+          </>
+        )}
+        <div onClick={makeGif} className="make">
+          Make a Gif
         </div>
         <div ref={rootEl} />
-        <div className="alert">Please select a photo.</div>
       </Wrapper>
     </>
   );
@@ -98,13 +122,17 @@ const GifEditor = ({ previewURL }) => {
 const Wrapper = styled.div`
   position: fixed;
   width: 90%;
-  top: 15rem;
+  top: 10rem;
   border-radius: 1.5rem;
   box-shadow: ${({ theme }) => theme.boxShadow.normal};
   display: flex;
   flex-direction: column;
   align-items: center;
-  .upload {
+  a {
+    color: black;
+    text-decoration: none;
+  }
+  .make {
     font: 800 11.5px Arial;
     position: absolute;
     right: 0;
@@ -121,11 +149,30 @@ const Wrapper = styled.div`
     justify-content: center;
     cursor: pointer;
   }
-  .alert {
+  .background {
     position: fixed;
-    border-radius: 0.5rem;
-    transition: 1s;
-    top: 7rem;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.7;
+    z-index: 100;
+  }
+  .download {
+    position: absolute;
+    top: 15rem;
+    z-index: 100;
+    display: flex;
+    background-color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 2rem;
+    &__btn {
+      cursor: pointer;
+      :last-child {
+        margin-left: 1rem;
+      }
+    }
   }
   .tui-image-editor-container {
     border-radius: 1.5rem;
@@ -135,6 +182,9 @@ const Wrapper = styled.div`
     top: 1rem;
   }
   .tui-image-editor-header-logo {
+    display: none;
+  }
+  .tui-image-editor-header-buttons {
     display: none;
   }
 `;
