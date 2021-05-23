@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import TuiImageEditor from "tui-image-editor";
 import "gif-generator/dist/gif-generator";
+import { getGif, postGif } from "api";
 
 const GifEditor = ({ previewURL }) => {
   // const [canvas, setCanvas] = useState<HTMLCanvasElement>();
@@ -9,6 +10,9 @@ const GifEditor = ({ previewURL }) => {
   const [imageEditor, setImageEditor] = useState(null);
 
   const rootEl = useRef();
+
+  const [download, setDownload] = useState(null);
+  const [blob, setBlob] = useState(null);
 
   useEffect(() => {
     // if (window) {
@@ -59,15 +63,17 @@ const GifEditor = ({ previewURL }) => {
     const gifGenerator = new GifGenerator(imageEditor._graphics.getCanvas());
     gifGenerator.make().then(
       (blob) => {
-        console.log("blob", blob);
-        console.log(window.URL.createObjectURL(blob));
-        window.open(window.URL.createObjectURL(blob));
+        setBlob(blob);
+        console.log("blobaaa", blob);
+        // console.log(window.URL.createObjectURL(blob));
+        setDownload(window.URL.createObjectURL(blob));
       },
       (error) => {
         alert(error);
       }
     );
   };
+  //localhost:3000/f431b497-4ece-46d4-8708-8b1703d21b6e
 
   // useEffect(() => {
   //   // if (canvas) setGifGenerator(new GifGenerator(canvas._graphics.getCanvas()));
@@ -106,10 +112,25 @@ const GifEditor = ({ previewURL }) => {
   //     // console.log(canvas.getContext("2d"));
   //   }
   // }, [canvas]);
+  const handleUpload = async () => {
+    const file = new File([blob], "file.gif");
+    const formData = new FormData();
+    formData.append("gif", file);
+    const res = await postGif(formData);
+    console.log(res);
+  };
 
   return (
     <>
       <Wrapper>
+        {download && (
+          <div style={{ display: "flex" }}>
+            <a href={download} download="new_file_name.gif">
+              download
+            </a>
+            <div onClick={handleUpload}>server upload</div>
+          </div>
+        )}
         <div onClick={render} className="upload">
           Save
         </div>
@@ -150,7 +171,7 @@ const GifEditor = ({ previewURL }) => {
 const Wrapper = styled.div`
   position: fixed;
   width: 90%;
-  top: 10rem;
+  top: 15rem;
   border-radius: 1.5rem;
   box-shadow: ${({ theme }) => theme.boxShadow.normal};
   display: flex;
