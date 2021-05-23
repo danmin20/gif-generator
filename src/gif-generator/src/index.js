@@ -18,7 +18,8 @@ export class GifGenerator {
       height: this.height,
       transparent: null,
       repeat: 0,
-      setQuality: 10,
+      workers: 8,
+      setQuality: 20,
     });
 
     Object.keys(this.events).map((event) => {
