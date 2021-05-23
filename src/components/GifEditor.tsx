@@ -1,62 +1,66 @@
 import { useEffect, useRef, useState } from "react";
-import { fabric } from "fabric";
 import styled from "styled-components";
-import { GifGenerator } from "gif-generator/src";
-import ImageEditor from "@toast-ui/react-image-editor";
+import TuiImageEditor from "tui-image-editor";
+import "gif-generator/dist/gif-generator";
+import { postGif } from "api";
+
+declare global {
+  interface Window {
+    GifGenerator: any;
+  }
+}
 
 const GifEditor = ({ previewURL }) => {
-  const [canvas, setCanvas] = useState<HTMLCanvasElement>();
-  const [gifGenerator, setGifGenerator] = useState(null);
+  const [imageEditor, setImageEditor] = useState(null);
+
+  const rootEl = useRef();
+
+  const [download, setDownload] = useState(null);
+  const [blob, setBlob] = useState(null);
+
+  const [isMakeStarted, setIsMakeStarted] = useState(false);
+  const [isUploadLoading, setIsUploadLoading] = useState(false);
+  const [viewLink, setViewLink] = useState(null);
 
   useEffect(() => {
     if (window) {
-      setCanvas(
-        document.getElementsByClassName(
-          "tui-image-editor-container"
-        )[0] as HTMLCanvasElement
+      setImageEditor(
+        new TuiImageEditor(rootEl.current, {
+          includeUI: {
+            loadImage: {
+              path: previewURL,
+              name: "SampleImage",
+            },
+            uiSize: {
+              width: "100%",
+              height: "600px",
+            },
+            menu: ["draw", "text"],
+            menuBarPosition: "bottom",
+          },
+          cssMaxWidth: 500,
+          cssMaxHeight: 700,
+          usageStatistics: false,
+        })
       );
     }
   }, []);
-  console.log(
-    "asdf",
-    document.getElementsByClassName("tui-image-editor-container")
-  );
-  console.log("canvas", canvas);
-  console.log('useref',useRef.arguments)
 
-  useEffect(()=>{
-    if(canvas)setGifGenerator(new GifGenerator(canvas._graphics.getCanvas()));
-  }, [canvas])
+  useEffect(() => {
+    if (imageEditor) {
+      console.log(imageEditor._graphics.getCanvas().getObjects());
+    }
+  }, [imageEditor]);
 
-  // useEffect(() => {
-  //   // const img = lowerCanvas?.toDataURL("image/png");
-  //   // const uploaded = document.getElementById("image");
-  //   // console.log(uploaded);
-  //   // let w = window.open();
-  //   // if (w?.window) w.document.body.innerHTML = "<img src='" + img + "'>";
-  //   const image = new Image();
-  //   // image.onload = function () {
-  //   //   lowerCanvas.width = uploaded.clientWidth;
-  //   //   lowerCanvas.height = uploaded.clientHeight;
-  //   //   lowerCanvas?.getContext("2d").drawImage(image, 0, 0);
-  //   // };
-  //   image.src = previewURL;
-  //   console.log("canvascontext", canvas?.getContext);
-  //   if (canvas?.getContext) {
-  //     console.log('왜안돼')
-  //     image.onload = function () {
-  //       canvas.width = 1000;
-  //       canvas.height = 572;
-  //       canvas?.getContext("2d").drawImage(image, 0, 0);
-  //     };
-  //     // console.log(canvas.getContext("2d"));
-  //   }
-  // }, [canvas]);
-
-  const render = () => {
+  const makeGif = () => {
+    setIsMakeStarted(true);
+    const gifGenerator = new window.GifGenerator(
+      imageEditor._graphics.getCanvas()
+    );
     gifGenerator.make().then(
       (blob) => {
-        window.open(window.URL.createObjectURL(blob));
+        setBlob(blob);
+        setDownload(window.URL.createObjectURL(blob));
       },
       (error) => {
         alert(error);
@@ -64,44 +68,58 @@ const GifEditor = ({ previewURL }) => {
     );
   };
 
+  const handleUpload = async () => {
+    setIsUploadLoading(true);
+    const file = new File([blob], "new_gif.gif");
+    const formData = new FormData();
+    formData.append("gif", file);
+    const res = await postGif(formData);
+    console.log(res);
+    setIsUploadLoading(false);
+    setViewLink(
+      `https://gif-generator.s3.ap-northeast-2.amazonaws.com//gif/${res.id}.gif`
+    );
+  };
+
   return (
-    <Container>
-      <div onClick={render} className="upload">
-        Save
-      </div>
-      <ImageEditor
-        includeUI={{
-          loadImage: {
-            path: previewURL,
-            name: "SampleImage",
-          },
-          menu: ["draw", "text"],
-          initMenu: "draw",
-          uiSize: {
-            width: "100%",
-            height: "600px",
-          },
-          menuBarPosition: "bottom",
-        }}
-        cssMaxHeight={500}
-        cssMaxWidth={700}
-        selectionStyle={{
-          cornerSize: 20,
-          rotatingPointOffset: 70,
-        }}
-        usageStatistics={true}
-      />
-      <div className="alert">Please select a photo.</div>
-    </Container>
-    // <Container>
-    //   <ImgBox>
-    //     <canvas id="gif-canvas" />
-    //   </ImgBox>
-    // </Container>
+    <>
+      <Wrapper>
+        {((isMakeStarted && !download) || isUploadLoading) && (
+          <>
+            <div className="background" />
+            <div className="download">loading...</div>
+          </>
+        )}
+        {!isUploadLoading && viewLink && (
+          <div className="download" style={{ zIndex: 200 }}>
+            <a href={viewLink}>{viewLink}</a>
+          </div>
+        )}
+        {download && !isUploadLoading && (
+          <>
+            <div className="background" />
+            <div className="download">
+              <div className="download__btn">
+                <a href={download} download="new_gif.gif">
+                  Download a File
+                </a>
+              </div>
+              <div className="download__btn">
+                <div onClick={handleUpload}>Upload to Server</div>
+              </div>
+            </div>
+          </>
+        )}
+        <div onClick={makeGif} className="make">
+          Make a Gif
+        </div>
+        <div ref={rootEl} />
+      </Wrapper>
+    </>
   );
 };
 
-const Container = styled.div`
+const Wrapper = styled.div`
   position: fixed;
   width: 90%;
   top: 10rem;
@@ -110,7 +128,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  .upload {
+  a {
+    color: black;
+    text-decoration: none;
+  }
+  .make {
     font: 800 11.5px Arial;
     position: absolute;
     right: 0;
@@ -127,11 +149,30 @@ const Container = styled.div`
     justify-content: center;
     cursor: pointer;
   }
-  .alert {
+  .background {
     position: fixed;
-    border-radius: 0.5rem;
-    transition: 1s;
-    top: 7rem;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.7;
+    z-index: 100;
+  }
+  .download {
+    position: absolute;
+    top: 15rem;
+    z-index: 100;
+    display: flex;
+    background-color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 2rem;
+    &__btn {
+      cursor: pointer;
+      :last-child {
+        margin-left: 1rem;
+      }
+    }
   }
   .tui-image-editor-container {
     border-radius: 1.5rem;
@@ -141,6 +182,9 @@ const Container = styled.div`
     top: 1rem;
   }
   .tui-image-editor-header-logo {
+    display: none;
+  }
+  .tui-image-editor-header-buttons {
     display: none;
   }
 `;

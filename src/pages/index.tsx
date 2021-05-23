@@ -1,5 +1,4 @@
 import Header from "components/Header";
-import Image from "components/Image";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useState } from "react";
