@@ -70,9 +70,8 @@ const GifEditor = ({ previewURL }) => {
     const res = await postGif(formData);
 
     setIsUploadLoading(false);
-    setViewLink(
-      `https://gif-generator.s3.ap-northeast-2.amazonaws.com//gif/${res.id}.gif`
-    );
+    // https://gif-generator.bu.to
+    setViewLink(`http://localhost:3000/${res.id}`);
   };
 
   return (
