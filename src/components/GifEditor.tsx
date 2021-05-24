@@ -46,12 +46,6 @@ const GifEditor = ({ previewURL }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (imageEditor) {
-      console.log(imageEditor._graphics.getCanvas().getObjects());
-    }
-  }, [imageEditor]);
-
   const makeGif = () => {
     setIsMakeStarted(true);
     const gifGenerator = new window.GifGenerator(
@@ -74,7 +68,7 @@ const GifEditor = ({ previewURL }) => {
     const formData = new FormData();
     formData.append("gif", file);
     const res = await postGif(formData);
-    console.log(res);
+
     setIsUploadLoading(false);
     setViewLink(
       `https://gif-generator.s3.ap-northeast-2.amazonaws.com//gif/${res.id}.gif`
