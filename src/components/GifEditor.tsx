@@ -17,6 +17,7 @@ const GifEditor = ({ previewURL }) => {
 
   const [download, setDownload] = useState(null);
   const [blob, setBlob] = useState(null);
+  const [percent, setPercent] = useState(0);
 
   const [isMakeStarted, setIsMakeStarted] = useState(false);
   const [isUploadLoading, setIsUploadLoading] = useState(false);
@@ -51,8 +52,11 @@ const GifEditor = ({ previewURL }) => {
     const gifGenerator = new window.GifGenerator(
       imageEditor._graphics.getCanvas()
     );
+    gifGenerator.on("progress", (p: number) => {
+      setPercent(Math.round(p * 100));
+    });
     gifGenerator.make().then(
-      (blob) => {
+      (blob: Blob) => {
         setBlob(blob);
         setDownload(window.URL.createObjectURL(blob));
       },
@@ -80,7 +84,7 @@ const GifEditor = ({ previewURL }) => {
         {((isMakeStarted && !download) || isUploadLoading) && (
           <>
             <div className="background" />
-            <div className="download">loading...</div>
+            <div className="download">loading... {percent}%</div>
           </>
         )}
         {!isUploadLoading && viewLink && (
