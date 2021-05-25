@@ -1,5 +1,4 @@
 import GIF from "@dhdbstjr98/gif.js";
-import { fabric } from "fabric";
 import Component from "./components";
 
 export class GifGenerator {
@@ -52,10 +51,10 @@ export class GifGenerator {
     const objs = [];
 
     fabricObjs.map((fabricObj) => {
-      if (fabricObj.path !== undefined) {
+      if (fabricObj.path !== null) {
         objs.push(new Component.Brush(fabricObj));
         this.canvas.remove(fabricObj);
-      } else if (fabricObj.text !== undefined) {
+      } else if (fabricObj.text !== null) {
         objs.push(new Component.Text(fabricObj));
         this.canvas.remove(fabricObj);
       }

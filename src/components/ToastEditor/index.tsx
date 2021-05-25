@@ -2,6 +2,7 @@
 import ImageEditor from "@toast-ui/react-image-editor";
 import { useState } from "react";
 import styled from "styled-components";
+import { media } from "styles/theme";
 import "tui-image-editor/dist/tui-image-editor.css";
 
 const ToastEditor = ({ setPreviewURL, setIsImgAdded, setIsEditorOpened }) => {
@@ -69,11 +70,10 @@ const Container = styled.div`
   .move {
     font: 800 11.5px Arial;
     position: absolute;
-    right: 0;
     top: 0;
+    left: 7.8rem;
     width: 120px;
     height: 40px;
-    background: red;
     z-index: 10;
     border-radius: 20px;
     margin: 8px;
@@ -82,6 +82,12 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    :hover {
+      text-decoration: underline;
+    }
+    ${media.tablet} {
+      left: 12.3rem;
+    }
   }
   .alert {
     position: fixed;
@@ -98,6 +104,12 @@ const Container = styled.div`
   }
   .tui-image-editor-header-logo {
     display: none;
+  }
+  .tui-image-editor-help-menu {
+    display: none;
+  }
+  .tui-image-editor-header-buttons {
+    position: absolute;
   }
 `;
 
