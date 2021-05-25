@@ -17,6 +17,7 @@ const GifEditor = ({ previewURL }) => {
 
   const [download, setDownload] = useState(null);
   const [blob, setBlob] = useState(null);
+  const [percent, setPercent] = useState(0);
 
   const [isMakeStarted, setIsMakeStarted] = useState(false);
   const [isUploadLoading, setIsUploadLoading] = useState(false);
@@ -46,19 +47,16 @@ const GifEditor = ({ previewURL }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (imageEditor) {
-      console.log(imageEditor._graphics.getCanvas().getObjects());
-    }
-  }, [imageEditor]);
-
   const makeGif = () => {
     setIsMakeStarted(true);
     const gifGenerator = new window.GifGenerator(
       imageEditor._graphics.getCanvas()
     );
+    gifGenerator.on("progress", (p: number) => {
+      setPercent(Math.round(p * 100));
+    });
     gifGenerator.make().then(
-      (blob) => {
+      (blob: Blob) => {
         setBlob(blob);
         setDownload(window.URL.createObjectURL(blob));
       },
@@ -74,11 +72,9 @@ const GifEditor = ({ previewURL }) => {
     const formData = new FormData();
     formData.append("gif", file);
     const res = await postGif(formData);
-    console.log(res);
+
     setIsUploadLoading(false);
-    setViewLink(
-      `https://gif-generator.s3.ap-northeast-2.amazonaws.com//gif/${res.id}.gif`
-    );
+    setViewLink(`https://gif-generator.bu.to/${res.id}`);
   };
 
   return (
@@ -87,7 +83,9 @@ const GifEditor = ({ previewURL }) => {
         {((isMakeStarted && !download) || isUploadLoading) && (
           <>
             <div className="background" />
-            <div className="download">loading...</div>
+            <div className="download">
+              loading... {!isUploadLoading && percent}%
+            </div>
           </>
         )}
         {!isUploadLoading && viewLink && (
@@ -135,7 +133,7 @@ const Wrapper = styled.div`
   .make {
     font: 800 11.5px Arial;
     position: absolute;
-    right: 0;
+    left: 0;
     top: 0;
     width: 120px;
     height: 40px;
@@ -148,6 +146,9 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    :hover {
+      text-decoration: underline;
+    }
   }
   .background {
     position: fixed;
@@ -172,6 +173,9 @@ const Wrapper = styled.div`
       :last-child {
         margin-left: 1rem;
       }
+      :hover {
+        text-decoration: underline;
+      }
     }
   }
   .tui-image-editor-container {
@@ -185,6 +189,9 @@ const Wrapper = styled.div`
     display: none;
   }
   .tui-image-editor-header-buttons {
+    display: none;
+  }
+  .tui-image-editor-help-menu {
     display: none;
   }
 `;

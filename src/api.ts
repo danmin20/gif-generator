@@ -3,9 +3,7 @@ import axios from "axios";
 const baseURL = "https://9davbjzey4.execute-api.ap-northeast-2.amazonaws.com";
 
 export const postGif = async (formData) => {
-  console.log("file", formData);
   const { data } = await axios.post(baseURL, formData);
-
   return data;
 };
 
