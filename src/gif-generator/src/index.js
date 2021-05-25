@@ -1,5 +1,4 @@
 import GIF from "@dhdbstjr98/gif.js";
-import { fabric } from "fabric";
 import Component from "./components";
 
 export class GifGenerator {

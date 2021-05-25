@@ -74,8 +74,7 @@ const GifEditor = ({ previewURL }) => {
     const res = await postGif(formData);
 
     setIsUploadLoading(false);
-    // https://gif-generator.bu.to
-    setViewLink(`http://localhost:3000/${res.id}`);
+    setViewLink(`https://gif-generator.bu.to/${res.id}`);
   };
 
   return (
@@ -84,7 +83,9 @@ const GifEditor = ({ previewURL }) => {
         {((isMakeStarted && !download) || isUploadLoading) && (
           <>
             <div className="background" />
-            <div className="download">loading... {percent}%</div>
+            <div className="download">
+              loading... {!isUploadLoading && percent}%
+            </div>
           </>
         )}
         {!isUploadLoading && viewLink && (
@@ -132,7 +133,7 @@ const Wrapper = styled.div`
   .make {
     font: 800 11.5px Arial;
     position: absolute;
-    right: 0;
+    left: 0;
     top: 0;
     width: 120px;
     height: 40px;
@@ -145,6 +146,9 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    :hover {
+      text-decoration: underline;
+    }
   }
   .background {
     position: fixed;
@@ -169,6 +173,9 @@ const Wrapper = styled.div`
       :last-child {
         margin-left: 1rem;
       }
+      :hover {
+        text-decoration: underline;
+      }
     }
   }
   .tui-image-editor-container {
@@ -182,6 +189,9 @@ const Wrapper = styled.div`
     display: none;
   }
   .tui-image-editor-header-buttons {
+    display: none;
+  }
+  .tui-image-editor-help-menu {
     display: none;
   }
 `;
