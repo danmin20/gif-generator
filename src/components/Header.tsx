@@ -6,6 +6,7 @@ const Header = () => {
 
 const Container = styled.div`
   position: fixed;
+  box-sizing: border-box;
   top: 0;
   left: 0;
   width: 100%;
