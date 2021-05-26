@@ -3,6 +3,8 @@ import styled from "styled-components";
 import TuiImageEditor from "tui-image-editor";
 import "gif-generator/dist/gif-generator";
 import { postGif } from "api";
+import Close from "public/close.svg";
+import Copy from "public/copy.svg";
 
 declare global {
   interface Window {
@@ -24,6 +26,7 @@ const GifEditor = ({ previewURL }) => {
   const [viewLink, setViewLink] = useState(null);
 
   const [unableToUpload, setUnableToUpload] = useState(false);
+  const [isModalOpened, setIsModalOpened] = useState(false);
 
   useEffect(() => {
     if (window) {
@@ -62,6 +65,7 @@ const GifEditor = ({ previewURL }) => {
         setBlob(blob);
         if (blob.size > 5000000) setUnableToUpload(true);
         setDownload(window.URL.createObjectURL(blob));
+        setIsModalOpened(true);
       },
       (error) => {
         alert(error);
@@ -80,38 +84,75 @@ const GifEditor = ({ previewURL }) => {
     setViewLink(`https://gif-generator.bu.to/${res.id}`);
   };
 
+  const handleCloseModal = () => {
+    setIsModalOpened(false);
+    setIsMakeStarted(false);
+    setDownload(null);
+    setPercent(0);
+    setViewLink(null);
+  };
+
+  const clipboardCopy = (text: string) => {
+    if (!document.queryCommandSupported("copy")) {
+      return alert("클립보드가 지원되지 않는 브라우저입니다.");
+    }
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    // 사파리 브라우저 서포팅
+    textarea.focus();
+    // 사용자가 입력한 내용을 영역을 설정할 때 필요
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+
+    return null;
+  };
+
   return (
     <>
       <Wrapper>
         {((isMakeStarted && !download) || isUploadLoading) && (
           <>
             <div className="background" />
-            <div className="download">
-              loading... {!isUploadLoading && `${percent}%`}
+            <div className="modal">
+              <div className="download">
+                loading... {!isUploadLoading && `${percent}%`}
+              </div>
             </div>
           </>
         )}
         {!isUploadLoading && viewLink && (
-          <div className="download" style={{ zIndex: 200 }}>
-            <a href={viewLink}>{viewLink}</a>
-          </div>
+          <>
+            <div className="background" />
+            <div className="modal">
+              <div className="download">
+                <div className="modal__close" onClick={handleCloseModal}>
+                  <Close />
+                </div>
+                <div className="download__explain">Click to Copy the Link!</div>
+                <div
+                  className="download__copy"
+                  onClick={() => clipboardCopy(viewLink)}
+                >
+                  {viewLink}
+                  <div style={{ marginLeft: "0.5rem" }}>
+                    <Copy />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
         )}
-        {download && !isUploadLoading && (
-          // <>
-          //   <div className="background" />
-          //   <div className="download">
-          //     <div className={`download__btn ${unableToUpload && "unable"}`}>
-          //       <a href={download} download="new_gif.gif">
-          //         Download a File
-          //       </a>
-          //     </div>
-          //     <div className="download__btn">
-          //       <div onClick={handleUpload}>Upload to Server</div>
-          //     </div>
-          //   </div>
-          // </>
+        {download && !isUploadLoading && isModalOpened && !viewLink && (
           <NextStepModal
-            {...{ unableToUpload, download, handleUpload, blob }}
+            {...{
+              unableToUpload,
+              download,
+              handleUpload,
+              blob,
+              handleCloseModal,
+            }}
           />
         )}
         <div onClick={makeGif} className="make">
@@ -123,13 +164,22 @@ const GifEditor = ({ previewURL }) => {
   );
 };
 
-const NextStepModal = ({ unableToUpload, download, handleUpload, blob }) => {
+const NextStepModal = ({
+  unableToUpload,
+  download,
+  handleUpload,
+  blob,
+  handleCloseModal,
+}) => {
   const url = window.URL.createObjectURL(blob);
   return (
     <ModalWrapper {...{ unableToUpload }}>
       <div className="background" />
       <div className="modal">
         <div className="download">
+          <div className="modal__close" onClick={handleCloseModal}>
+            <Close />
+          </div>
           <img src={url} width={500} />
           <div className="buttons">
             <div className="buttons__btn">
@@ -161,6 +211,63 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  .background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.7;
+    z-index: 100;
+  }
+  .modal {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    &__close {
+      cursor: pointer;
+      position: absolute;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: white;
+      border-radius: 50%;
+      box-shadow: ${({ theme }) => theme.boxShadow.normal};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      right: -0.7rem;
+      top: -0.7rem;
+      z-index: 103;
+    }
+  }
+  .download {
+    position: absolute;
+    z-index: 100;
+    background-color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 2rem;
+    &__explain {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 800;
+    }
+    &__copy {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      :hover {
+        text-decoration: underline;
+      }
+    }
+  }
   a {
     color: black;
     text-decoration: none;
@@ -208,23 +315,6 @@ const Wrapper = styled.div`
 `;
 
 const ModalWrapper = styled.div<{ unableToUpload: boolean }>`
-  .background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: black;
-    opacity: 0.7;
-    z-index: 100;
-  }
-  .modal {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
   .download {
     position: absolute;
     z-index: 100;
