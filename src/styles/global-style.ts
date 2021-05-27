@@ -53,4 +53,43 @@ export const GlobalStyle = createGlobalStyle`
             display: block;
         }
     }
+
+    .tui-image-editor-container {
+    border-radius: 1.5rem;
+    .color-picker-control {
+      cursor: default;
+    }
+    .color-picker-control .tui-colorpicker-palette-button {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .tui-colorpicker-palette-container li {
+      float: left;
+    }
+    .tui-colorpicker-clearfix:after {
+      clear: both;
+      display: block;
+      content: "";
+    }
+    .tui-image-editor-help-menu.top {
+      left: 19rem;
+      top: 1rem;
+    }
+    .tui-image-editor-header-logo {
+      display: none;
+    }
+    .tui-image-editor-help-menu {
+      display: none;
+    }
+    .tui-image-editor-header-buttons {
+      position: absolute;
+    }
+    .tui-colorpicker-palette-preview {
+      font-size: 0;
+    }
+    .tui-colorpicker-palette-hex {
+      margin-top: 1px;
+    }
+  }
 `;

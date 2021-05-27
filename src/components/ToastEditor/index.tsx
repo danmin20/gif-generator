@@ -95,22 +95,6 @@ const Container = styled.div`
     transition: 1s;
     top: 7rem;
   }
-  .tui-image-editor-container {
-    border-radius: 1.5rem;
-  }
-  .tui-image-editor-container .tui-image-editor-help-menu.top {
-    left: 19rem;
-    top: 1rem;
-  }
-  .tui-image-editor-header-logo {
-    display: none;
-  }
-  .tui-image-editor-help-menu {
-    display: none;
-  }
-  .tui-image-editor-header-buttons {
-    position: absolute;
-  }
 `;
 
 export default ToastEditor;
