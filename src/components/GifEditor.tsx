@@ -90,8 +90,11 @@ const GifEditor = ({ previewURL }) => {
     setDownload(null);
     setPercent(0);
     setViewLink(null);
+    setIsCopied(false);
   };
 
+  // 클립보드 관련
+  const [isCopied, setIsCopied] = useState(false);
   const clipboardCopy = (text: string) => {
     if (!document.queryCommandSupported("copy")) {
       return alert("클립보드가 지원되지 않는 브라우저입니다.");
@@ -107,6 +110,13 @@ const GifEditor = ({ previewURL }) => {
     document.body.removeChild(textarea);
 
     return null;
+  };
+  const handleShare = (text) => {
+    setIsCopied(true);
+    clipboardCopy(text);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 2000);
   };
 
   return (
@@ -133,7 +143,7 @@ const GifEditor = ({ previewURL }) => {
                 <div className="download__explain">Click to Copy the Link!</div>
                 <div
                   className="download__copy"
-                  onClick={() => clipboardCopy(viewLink)}
+                  onClick={() => handleShare(viewLink)}
                 >
                   {viewLink}
                   <div style={{ marginLeft: "0.5rem" }}>
@@ -141,6 +151,7 @@ const GifEditor = ({ previewURL }) => {
                   </div>
                 </div>
               </div>
+              <CopiedText {...{ isCopied }}>Copied to Clipboard!</CopiedText>
             </div>
           </>
         )}
@@ -359,6 +370,20 @@ const ModalWrapper = styled.div<{ unableToUpload: boolean }>`
       }
     }
   }
+`;
+
+const CopiedText = styled.div<{ isCopied: boolean }>`
+  position: absolute;
+  z-index: 100;
+  top: 35rem;
+  font-size: 1.2rem;
+  background: white;
+  padding: 0.7rem 1rem;
+  white-space: nowrap;
+  border-radius: 2rem;
+  transition: 0.3s;
+  opacity: ${({ isCopied }) => (isCopied ? 1 : 0)};
+  box-shadow: ${({ theme }) => theme.boxShadow.normal};
 `;
 
 export default GifEditor;
